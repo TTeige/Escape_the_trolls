@@ -103,26 +103,18 @@ std::pair<int, int> MoveableObject::push(Map *map) {
         SDL_Point tilePos = calculateTilePosition();
         switch (mDirection) {
             case MoveableObject::Up:
-                map->tiles[map->w * (tilePos.y - 1) + tilePos.x].type = 0;
-                map->tiles[map->w * (tilePos.y - 2) + tilePos.x].type = 1;
                 changedTiles.first = map->tiles[map->w * (tilePos.y - 1) + tilePos.x].absoluteNumber;
                 changedTiles.second = map->tiles[map->w * (tilePos.y - 2) + tilePos.x].absoluteNumber;
                 break;
             case MoveableObject::Down:
-                map->tiles[map->w * (tilePos.y + 1) + tilePos.x].type = 0;
-                map->tiles[map->w * (tilePos.y + 2) + tilePos.x].type = 1;
                 changedTiles.first = map->tiles[map->w * (tilePos.y + 1) + tilePos.x].absoluteNumber;
                 changedTiles.second = map->tiles[map->w * (tilePos.y + 2) + tilePos.x].absoluteNumber;
                 break;
             case MoveableObject::Left:
-                map->tiles[map->w * tilePos.y + tilePos.x - 1].type = 0;
-                map->tiles[map->w * tilePos.y + tilePos.x - 2].type = 1;
                 changedTiles.first = map->tiles[map->w * tilePos.y + tilePos.x - 1].absoluteNumber;
                 changedTiles.second = map->tiles[map->w * tilePos.y + tilePos.x - 2].absoluteNumber;
                 break;
             case MoveableObject::Right:
-                map->tiles[map->w * tilePos.y + tilePos.x + 1].type = 0;
-                map->tiles[map->w * tilePos.y + tilePos.x + 2].type = 1;
                 changedTiles.first = map->tiles[map->w * tilePos.y + tilePos.x + 1].absoluteNumber;
                 changedTiles.second = map->tiles[map->w * tilePos.y + tilePos.x + 2].absoluteNumber;
                 break;

@@ -200,14 +200,33 @@ void SDLWrapper::freeTextObjects() {
 void SDLWrapper::updateMap(std::pair<int, int> changedTiles) {
     for (auto &obj : mDrawableObjects) {
         if (obj->mTag == Wall && (obj->mId == changedTiles.first)) {
-            obj->mBoundingBox.x = mStoredMap->tiles[changedTiles.second].posX * TILE_SIZE;
-            obj->mBoundingBox.y = mStoredMap->tiles[changedTiles.second].posY * TILE_SIZE;
-            obj->mId = mStoredMap->tiles[changedTiles.second].absoluteNumber;
-            break;
+            if (!isOutofBounds(changedTiles.first)) {
+                mStoredMap->tiles[changedTiles.first].type = 0;
+                mStoredMap->tiles[changedTiles.second].type = 1;
+                obj->mBoundingBox.x = mStoredMap->tiles[changedTiles.second].posX * TILE_SIZE;
+                obj->mBoundingBox.y = mStoredMap->tiles[changedTiles.second].posY * TILE_SIZE;
+                obj->mId = mStoredMap->tiles[changedTiles.second].absoluteNumber;
+                break;
+            }
         }
     }
 
 
+}
+
+bool SDLWrapper::isOutofBounds(int changedTile) const {
+    bool isOutofBounds = false;
+    if (mStoredMap->tiles[changedTile].posX < 0) {
+        isOutofBounds = true;
+    } else if (mStoredMap->tiles[changedTile].posX > mStoredMap->w) {
+        isOutofBounds = true;
+    } else if (mStoredMap->tiles[changedTile].posY < 0) {
+        isOutofBounds = true;
+    } else if (mStoredMap->tiles[changedTile].posY > mStoredMap->h) {
+        isOutofBounds = true;
+    }
+
+    return isOutofBounds;
 }
 
 

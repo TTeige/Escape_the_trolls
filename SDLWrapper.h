@@ -66,6 +66,8 @@ private:
 
     void freeTextObjects();
 
+    bool isOutofBounds(int changedTile) const;
+
 private:
     SDL_Window *mWindow;
     SDL_Renderer *mRenderer;
