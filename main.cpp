@@ -34,14 +34,13 @@ int main() {
                                                   SDL_Color {255, 255, 255});
 
 
-    bool run = true;
     bool nextTurn = false;
 
     SDL->update();
-    while (run) {
+    while (SDL->isRunning()) {
         unsigned int e = SDL->eventPoll();
         if (e == SDL_QUIT) {
-            run = false;
+            SDL->stopRunning();
         } else {
             switch (e) {
                 case Up:
@@ -124,7 +123,7 @@ Map *loadMap() {
                     map_values[i].type = 1;
                 } else if (c == ' ') {
                     map_values[i].type = 0;
-                } else if (c == 'x') {
+                } else if (c == 'X') {
                     map_values[i].type = 2;
                 }
                 map_values[i].absoluteNumber = i;

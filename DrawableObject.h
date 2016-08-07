@@ -22,7 +22,7 @@ public:
     virtual void update();
 
 protected:
-    SDL_Point calculateTilePosition();
+    SDL_Point calculateTilePosition() const;
 
 public:
     SDL_Texture *mTexture;

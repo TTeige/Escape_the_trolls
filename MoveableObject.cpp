@@ -103,26 +103,31 @@ std::pair<int, int> MoveableObject::push(Map *map) {
         SDL_Point tilePos = calculateTilePosition();
         switch (mDirection) {
             case MoveableObject::Up:
-                changedTiles.first = map->tiles[map->w * (tilePos.y - 1) + tilePos.x].absoluteNumber;
-                changedTiles.second = map->tiles[map->w * (tilePos.y - 2) + tilePos.x].absoluteNumber;
+                changedTiles.first = map->w * (tilePos.y - 1) + tilePos.x;
+                changedTiles.second = map->w * (tilePos.y - 2) + tilePos.x;
                 break;
             case MoveableObject::Down:
-                changedTiles.first = map->tiles[map->w * (tilePos.y + 1) + tilePos.x].absoluteNumber;
-                changedTiles.second = map->tiles[map->w * (tilePos.y + 2) + tilePos.x].absoluteNumber;
+                changedTiles.first = map->w * (tilePos.y + 1) + tilePos.x;
+                changedTiles.second = map->w * (tilePos.y + 2) + tilePos.x;
                 break;
             case MoveableObject::Left:
-                changedTiles.first = map->tiles[map->w * tilePos.y + tilePos.x - 1].absoluteNumber;
-                changedTiles.second = map->tiles[map->w * tilePos.y + tilePos.x - 2].absoluteNumber;
+                changedTiles.first = map->w * tilePos.y + tilePos.x - 1;
+                changedTiles.second = map->w * tilePos.y + tilePos.x - 2;
                 break;
             case MoveableObject::Right:
-                changedTiles.first = map->tiles[map->w * tilePos.y + tilePos.x + 1].absoluteNumber;
-                changedTiles.second = map->tiles[map->w * tilePos.y + tilePos.x + 2].absoluteNumber;
+                changedTiles.first = map->w * tilePos.y + tilePos.x + 1;
+                changedTiles.second = map->w * tilePos.y + tilePos.x + 2;
                 break;
             default:
                 break;
         }
     }
     return changedTiles;
+}
+
+bool MoveableObject::isAtEnd(Map *map) const {
+    SDL_Point tilePos = calculateTilePosition();
+    return map->tiles[map->w * tilePos.y + tilePos.x].type == 2;
 }
 
 

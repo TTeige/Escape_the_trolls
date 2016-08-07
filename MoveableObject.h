@@ -34,6 +34,8 @@ public:
 
     std::pair<int, int> push(Map *map);
 
+    bool isAtEnd(Map *map) const;
+
 private:
 
     void turn(MoveableObject::Direction direction);

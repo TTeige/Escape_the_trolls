@@ -58,6 +58,10 @@ public:
 
     void updateMap(std::pair<int, int> changedTiles);
 
+    bool isRunning();
+
+    void stopRunning();
+
 private:
 
     void sdlPrintError();
@@ -83,6 +87,7 @@ private:
     Map *mStoredMap;
 
     unsigned int mObjectIdTracker = 0;
+    bool mIsRunning;
 
 };
 

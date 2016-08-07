@@ -8,6 +8,7 @@
 
 SDLWrapper::SDLWrapper(unsigned int flags) {
     SDL_Init(flags);
+    mIsRunning = true;
 }
 
 SDLWrapper::~SDLWrapper() {
@@ -153,6 +154,10 @@ void SDLWrapper::update() {
         if (m->mTag == Player) {
             mCamera->setPosition(m->mBoundingBox.x + (m->mBoundingBox.w / 2) - (SCREEN_WIDTH / 2),
                                  m->mBoundingBox.y + (m->mBoundingBox.h / 2) - (SCREEN_HEIGHT / 2));
+            MoveableObject *player = static_cast<MoveableObject *>(m);
+            if (player->isAtEnd(mStoredMap)) {
+                stopRunning();
+            }
         }
     }
     for (auto &t : mTextObjects) {
@@ -200,7 +205,7 @@ void SDLWrapper::freeTextObjects() {
 void SDLWrapper::updateMap(std::pair<int, int> changedTiles) {
     for (auto &obj : mDrawableObjects) {
         if (obj->mTag == Wall && (obj->mId == changedTiles.first)) {
-            if (!isOutofBounds(changedTiles.first)) {
+            if (!isOutofBounds(changedTiles.second)) {
                 mStoredMap->tiles[changedTiles.first].type = 0;
                 mStoredMap->tiles[changedTiles.second].type = 1;
                 obj->mBoundingBox.x = mStoredMap->tiles[changedTiles.second].posX * TILE_SIZE;
@@ -216,6 +221,8 @@ void SDLWrapper::updateMap(std::pair<int, int> changedTiles) {
 
 bool SDLWrapper::isOutofBounds(int changedTile) const {
     bool isOutofBounds = false;
+    if (changedTile < 0 || changedTile > (mStoredMap->w * mStoredMap->h))
+        isOutofBounds = true;
     if (mStoredMap->tiles[changedTile].posX < 0) {
         isOutofBounds = true;
     } else if (mStoredMap->tiles[changedTile].posX > mStoredMap->w) {
@@ -227,6 +234,14 @@ bool SDLWrapper::isOutofBounds(int changedTile) const {
     }
 
     return isOutofBounds;
+}
+
+bool SDLWrapper::isRunning() {
+    return mIsRunning;
+}
+
+void SDLWrapper::stopRunning() {
+    mIsRunning = false;
 }
 
 

@@ -37,6 +37,7 @@ void DrawableObject::update() {
 
 }
 
-SDL_Point DrawableObject::calculateTilePosition() {
+SDL_Point DrawableObject::calculateTilePosition() const {
     return SDL_Point{mBoundingBox.x / TILE_SIZE, mBoundingBox.y / TILE_SIZE};
 }
+
