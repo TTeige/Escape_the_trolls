@@ -62,6 +62,8 @@ public:
 
     void stopRunning();
 
+    void generateMap(int w, int h);
+
 private:
 
     void sdlPrintError();

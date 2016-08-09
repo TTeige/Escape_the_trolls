@@ -13,6 +13,10 @@ int main() {
 
     loadAllTextures(SDL);
 
+    SDL->generateMap(5, 5);
+
+    return 1;
+
     Map *map = loadMap();
     SDL->assignMap(map);
     MoveableObject *player = SDL->createPlayer();
@@ -126,7 +130,7 @@ Map *loadMap() {
                 } else if (c == 'X') {
                     map_values[i].type = 2;
                 }
-                map_values[i].absoluteNumber = i;
+                map_values[i].tileNumber = i;
                 map_values[i].posX = i % num_cols;
                 map_values[i].posY = i / num_cols;
             }

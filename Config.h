@@ -9,9 +9,24 @@
 #define PLAYER_SIZE 40
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
-#define MAP_SIZE (73 * 23)
+#define MAP_SIZE_WIDTH 73
+#define MAP_SIZE_HEIGHT 23
 
 struct Tile;
+struct GenerationTiles;
+
+struct GenerationMap {
+    GenerationTiles *tiles;
+    int w;
+    int h;
+};
+
+struct GenerationTiles {
+    int posX = -1;
+    int posY = -1;
+    int absoluteNumber = -1;
+    int generationInformation[5]{0, 0, 0, 0, 0};
+};
 
 struct Map {
     Tile *tiles;
@@ -21,7 +36,7 @@ struct Map {
 
 struct Tile {
     int type;
-    int absoluteNumber;
+    int tileNumber;
     int posX;
     int posY;
 };

@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <SDL_image.h>
+#include <stack>
+#include <fstream>
 #include "SDLWrapper.h"
 
 SDLWrapper::SDLWrapper(unsigned int flags) {
@@ -172,7 +174,7 @@ void SDLWrapper::assignMap(Map *map) {
         for (int j = 0; j < mStoredMap->h; j++) {
             if (mStoredMap->tiles[mStoredMap->w * j + i].type == 1) {
                 addDrawableObject("wall", i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE, Wall,
-                                  mStoredMap->tiles[mStoredMap->w * j + i].absoluteNumber);
+                                  mStoredMap->tiles[mStoredMap->w * j + i].tileNumber);
             }
         }
     }
@@ -210,7 +212,7 @@ void SDLWrapper::updateMap(std::pair<int, int> changedTiles) {
                 mStoredMap->tiles[changedTiles.second].type = 1;
                 obj->mBoundingBox.x = mStoredMap->tiles[changedTiles.second].posX * TILE_SIZE;
                 obj->mBoundingBox.y = mStoredMap->tiles[changedTiles.second].posY * TILE_SIZE;
-                obj->mId = mStoredMap->tiles[changedTiles.second].absoluteNumber;
+                obj->mId = mStoredMap->tiles[changedTiles.second].tileNumber;
                 break;
             }
         }
@@ -242,6 +244,68 @@ bool SDLWrapper::isRunning() {
 
 void SDLWrapper::stopRunning() {
     mIsRunning = false;
+}
+
+void SDLWrapper::generateMap(int w, int h) {
+    GenerationTiles tiles[w * h];
+    int i = 0;
+    int j = 0;
+    std::stack<SDL_Point> history;
+    history.push(SDL_Point{j, i});
+
+    while (!history.empty()) {
+        tiles[w * i + j].generationInformation[4] = 1;
+        std::vector<int> check;
+
+        if (j > 0 && tiles[w * i + j - 1].generationInformation[4] == 0) {
+            check.push_back(0);
+        }
+        if (i > 0 && tiles[w * (i - 1) + j].generationInformation[4] == 0) {
+            check.push_back(1);
+        }
+        if (j < w - 1 && tiles[w * i + j + 1].generationInformation[4] == 0) {
+            check.push_back(2);
+        }
+        if (i < h - 1 && tiles[w * (i + 1) + j].generationInformation[4] == 0) {
+            check.push_back(3);
+        }
+
+        if (!check.empty()) {
+            history.push(SDL_Point{j, i});
+            int direction = (int) (rand() % check.size());
+            direction = check[direction];
+            switch (direction) {
+                case 0:
+                    tiles[w * i + j].generationInformation[0] = 1;
+                    j -= 1;
+                    tiles[w * i + j].generationInformation[2] = 1;
+                    break;
+                case 1:
+                    tiles[w * i + j].generationInformation[1] = 1;
+                    i -= 1;
+                    tiles[w * i + j].generationInformation[3] = 1;
+                    break;
+                case 2:
+                    tiles[w * i + j].generationInformation[2] = 1;
+                    j += 1;
+                    tiles[w * i + j].generationInformation[0] = 1;
+                    break;
+                case 3:
+                    tiles[w * i + j].generationInformation[3] = 1;
+                    i += 1;
+                    tiles[w * i + j].generationInformation[1] = 1;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            SDL_Point backtrack;
+            backtrack = history.top();
+            j = backtrack.x;
+            i = backtrack.y;
+            history.pop();
+        }
+    }
 }
 
 
